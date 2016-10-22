@@ -1,8 +1,9 @@
-.idea/
-gen/
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
 .DS_Store
-Pods/
-Podfile.lock
-xcuserdata/
-*.xcworkspace/
-GoogleService-Info.plist
+/build
+/captures
+.externalNativeBuild
