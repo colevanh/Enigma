@@ -1,6 +1,7 @@
 package com.group16.enigma;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
@@ -198,21 +199,25 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
 
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
-        if (user != null) {
-            mStatusTextView.setText("Email User:"+ user.getEmail());
-            mDetailTextView.setText("Firebase User:" + user.getUid());
-
-            findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
-            findViewById(R.id.email_password_fields).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
-        } else {
-            mStatusTextView.setText("Signed Out");
-            mDetailTextView.setText(null);
-
-            findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
-            findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_button).setVisibility(View.GONE);
+//        if (user != null) {
+//            mStatusTextView.setText("Email User:"+ user.getEmail());
+//            mDetailTextView.setText("Firebase User:" + user.getUid());
+//
+//            findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
+//            findViewById(R.id.email_password_fields).setVisibility(View.GONE);
+//            findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
+//        } else {
+//            mStatusTextView.setText("Signed Out");
+//            mDetailTextView.setText(null);
+//
+//            findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
+//            findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
+//            findViewById(R.id.sign_out_button).setVisibility(View.GONE);
+//        }
+        if(user != null){
+            startActivity(new Intent(this, MainActivity.class));
         }
+
     }
 
     @Override
