@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+
+        viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
+        tabLayout.setupWithViewPager(viewPager);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,29 +43,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        // Get ListView object from xml
-        listView = (ListView) findViewById(R.id.list);
-
-        // Defined Array values to show in ListView
-        String[] values = new String[] {
-                "Bill Gates",
-                "Steve Jobs",
-                "Elon Musk",
-                "Larry Page",
-                "Spongebob Squarepants",
-        };
-
-        int[] tempDp = new int[]{
-                R.drawable.bat,
-                R.drawable.bird,
-                R.drawable.fish,
-                R.drawable.kangaroo,
-                R.drawable.shark
-
-        };
-
-        listView.setAdapter(new ChatListAdapter(this, values, tempDp));
 
 
     }
