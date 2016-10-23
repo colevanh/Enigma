@@ -28,22 +28,15 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignInActivity  extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "EmailPassword";
 
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
 
     @VisibleForTesting
     public ProgressDialog mProgressDialog;
 
-    // [START declare_auth]
     private FirebaseAuth mAuth;
-    // [END declare_auth]
 
-    // [START declare_auth_listener]
     private FirebaseAuth.AuthStateListener mAuthListener;
-    // [END declare_auth_listener]
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +44,15 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_emailpassword);
 
         // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
-        mDetailTextView = (TextView) findViewById(R.id.detail);
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
 
         // Buttons
         findViewById(R.id.email_sign_in_button).setOnClickListener(this);
         findViewById(R.id.email_create_account_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
 
-        // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
 
-        // [START auth_state_listener]
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -77,23 +64,18 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // [START_EXCLUDE]
                 updateUI(user);
-                // [END_EXCLUDE]
             }
         };
     }
 
 
-    // [START on_start_add_listener]
     @Override
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
-    // [END on_start_add_listener]
 
-    // [START on_stop_remove_listener]
     @Override
     public void onStop() {
         super.onStop();
@@ -102,7 +84,6 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-    // [END on_stop_remove_listener]
 
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
@@ -112,7 +93,6 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
 
         showProgressDialog();
 
-        // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -127,12 +107,9 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        // [START_EXCLUDE]
                         hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END create_user_with_email]
     }
 
     private void signIn(String email, String password) {
@@ -143,7 +120,6 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
 
         showProgressDialog();
 
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -159,20 +135,9 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        // [START_EXCLUDE]
-                        if (!task.isSuccessful()) {
-                            mStatusTextView.setText("Auth Failed");
-                        }
                         hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END sign_in_with_email]
-    }
-
-    private void signOut() {
-        mAuth.signOut();
-        updateUI(null);
     }
 
     private boolean validateForm() {
@@ -199,21 +164,6 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
 
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
-//        if (user != null) {
-//            mStatusTextView.setText("Email User:"+ user.getEmail());
-//            mDetailTextView.setText("Firebase User:" + user.getUid());
-//
-//            findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
-//            findViewById(R.id.email_password_fields).setVisibility(View.GONE);
-//            findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
-//        } else {
-//            mStatusTextView.setText("Signed Out");
-//            mDetailTextView.setText(null);
-//
-//            findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
-//            findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-//            findViewById(R.id.sign_out_button).setVisibility(View.GONE);
-//        }
         if(user != null){
             startActivity(new Intent(this, MainActivity.class));
         }
@@ -227,8 +177,6 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.email_sign_in_button) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.sign_out_button) {
-            signOut();
         }
     }
 
