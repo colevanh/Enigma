@@ -19,11 +19,11 @@ public class SectionPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new Fragment();
+                return new FriendsFragment();
             case 1:
                 return new ChatListFragment();
             case 2:
-                return new Fragment();
+                return new SettingsFragment();
             default:
                 //return new SecondTabFragment();
                 return new Fragment();
