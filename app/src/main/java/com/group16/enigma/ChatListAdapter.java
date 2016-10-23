@@ -19,7 +19,7 @@ public class ChatListAdapter extends BaseAdapter {
     Context context;
     int [] imageId;
     private static LayoutInflater inflater=null;
-    public ChatListAdapter(MainActivity mainActivity, String[] nameList, int[] prgmImages) {
+    public ChatListAdapter(Context mainActivity, String[] nameList, int[] prgmImages) {
         // TODO Auto-generated constructor stub
         result=nameList;
         context=mainActivity;
