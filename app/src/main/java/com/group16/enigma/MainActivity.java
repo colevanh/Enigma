@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Show some sort of action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -40,52 +40,25 @@ public class MainActivity extends AppCompatActivity {
 
         // Defined Array values to show in ListView
         String[] values = new String[] {
-                "Friend 1: Bill Gates",
-                "Friend 2: Steve Jobs",
-                "Friend 3: Elon Musk",
-                "Friend 4: Larry Page",
-                "Friend 5: Spongebob Squarepants",
+                "Bill Gates",
+                "Steve Jobs",
+                "Elon Musk",
+                "Larry Page",
+                "Spongebob Squarepants",
         };
 
-        // Define a new Adapter
-        // First parameter - Context
-        // Second parameter - Layout for the row
-        // Third parameter - ID of the TextView to which the data is written
-        // Forth - the Array of data
+        int[] tempDp = new int[]{
+                R.drawable.bat,
+                R.drawable.bird,
+                R.drawable.fish,
+                R.drawable.kangaroo,
+                R.drawable.shark
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        };
+
+        listView.setAdapter(new ChatListAdapter(this, values, tempDp));
 
 
-        // Assign adapter to ListView
-        listView.setAdapter(adapter);
-
-        // ListView Item Click Listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                // ListView Clicked item index
-                int itemPosition     = position;
-
-                // ListView Clicked item value
-                String  itemValue    = (String) listView.getItemAtPosition(position);
-
-                // Show Alert
-                Toast.makeText(getApplicationContext(),
-                        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                        .show();
-
-                //Navigate to chat page
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                intent.putExtra("name", itemValue);
-                startActivity(intent);
-
-            }
-
-        });
     }
 
     @Override
