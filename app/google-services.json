@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "918657454386",
+    "firebase_url": "https://enigma-chat-v2.firebaseio.com",
+    "project_id": "enigma-chat-v2",
+    "storage_bucket": "enigma-chat-v2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918657454386:android:e44c9f2abe17d3d3",
+        "android_client_info": {
+          "package_name": "com.group16.enigma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "918657454386-d7a9lirpi88qbot12enspltsi79p1uqa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkNIzsf8XGuHEJPSlS4DbyP3oIU4mWAkE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

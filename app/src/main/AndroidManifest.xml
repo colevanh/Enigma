@@ -23,6 +23,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.group16.enigma.MainActivity" />
         </activity>
+        <activity android:name=".SignInActivity">
+        </activity>
     </application>
 
 </manifest>
