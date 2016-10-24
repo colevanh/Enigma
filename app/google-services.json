@@ -1,36 +1,45 @@
 {
   "project_info": {
-    "project_number": "1099376216156",
-    "firebase_url": "https://push-notifications-3da87.firebaseio.com",
-    "project_id": "push-notifications-3da87",
-    "storage_bucket": "push-notifications-3da87.appspot.com"
+    "project_number": "474973022534",
+    "firebase_url": "https://enigma-b485d.firebaseio.com",
+    "project_id": "enigma-b485d",
+    "storage_bucket": "enigma-b485d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1099376216156:android:e44c9f2abe17d3d3",
+        "mobilesdk_app_id": "1:474973022534:android:e44c9f2abe17d3d3",
         "android_client_info": {
           "package_name": "com.group16.enigma"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1099376216156-fm49aase547vndma1enphudi7mt22fus.apps.googleusercontent.com",
+          "client_id": "474973022534-9dpkfnmt2b889u88bklo4ctkobvactpd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.group16.enigma",
+            "certificate_hash": "17CB18B8FA93E186BFCDEA019D4CB2F92B2B4FF1"
+          }
+        },
+        {
+          "client_id": "474973022534-mk7j81goih252fi2bo4g9mp3gg5sft3j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD8gYgCTtL92PZC0riHhxx8pvDJT704cPo"
-        }
-      ],
+      "api_key": [],
       "services": {
         "analytics_service": {
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "474973022534-mk7j81goih252fi2bo4g9mp3gg5sft3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
