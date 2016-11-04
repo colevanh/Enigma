@@ -11,11 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity">
-            <!--android:name=".FriendsActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"-->
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,20 +20,18 @@
         </activity>
 
         <activity android:name=".SignInActivity" />
-            <!--<meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.group16.enigma.FriendsActivity" />
-        </activity>-->
 
         <service
-            android:name=".MyFirebaseMessagingService">
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
         <service
-            android:name=".MyFirebaseInstanceIdService">
+            android:name=".MyFirebaseInstanceIdService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
