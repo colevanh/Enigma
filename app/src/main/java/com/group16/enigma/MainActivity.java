@@ -26,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
     ListView listView ;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
-    private String mUsername;
     private String mPhotoUrl;
+
+    public static String mUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -7,35 +7,50 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:layout_marginTop="20dp"
             android:id="@+id/messengerImageView"
-            android:src="@drawable/common_google_signin_btn_icon_dark_focused"/>
+            android:src="@drawable/bird"/>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginLeft="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/messageTextView"
-                android:layout_weight="0"/>
-
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="0dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:id="@+id/messengerTextView"
-                android:layout_weight="0"/>
+                android:textColor="@color/colorGray"
+                android:layout_weight="0"
+                android:text="Sender"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/messageTextView"
+                android:layout_weight="0"
+                android:background="@drawable/rounded_corner_message"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginRight="10dp"
+                android:shadowColor="@color/colorDarkGray"
+                android:text="The quick brown fox jumped over the lazy dog"/>
+
+
         </LinearLayout>
 
     </LinearLayout>

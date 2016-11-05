@@ -9,12 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.text.TextWatcher;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -22,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.group16.enigma.MainActivity.mUsername;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -34,7 +41,7 @@ public class ChatActivity extends AppCompatActivity {
     private Button mSendButton;
 
     public static final String MESSAGES_CHILD = "messages";
-    public static final int DEFAULT_MSG_LENGTH_LIMIT = 10;
+    public static final int DEFAULT_MSG_LENGTH_LIMIT = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,8 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
+
+        getSupportActionBar().setTitle(name);
 
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -65,7 +74,7 @@ public class ChatActivity extends AppCompatActivity {
                 viewHolder.messengerTextView.setText(friendlyMessage.getName());
                 if (friendlyMessage.getPhotoUrl() == null) {
                     viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
-                            R.drawable.common_google_signin_btn_icon_dark));
+                            R.drawable.bird));
                 } else {
                     Glide.with(ChatActivity.this)
                             .load(friendlyMessage.getPhotoUrl())
@@ -117,13 +126,40 @@ public class ChatActivity extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = new Message(mMessageEditText.getText().toString(), "My username",
+                Message message = new Message(mMessageEditText.getText().toString(), mUsername,
                         null);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
                 mMessageEditText.setText("");
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_chat, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.action_decode_message:
+                Toast.makeText(this, "TODO: Decode most recent", Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            // action with ID action_settings was selected
+            case R.id.action_decode_message_all:
+                Toast.makeText(this, "TODO: Decode all", Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
