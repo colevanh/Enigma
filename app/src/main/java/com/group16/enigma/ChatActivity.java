@@ -145,12 +145,15 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // action with ID action_refresh was selected
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
             case R.id.action_decode_message:
                 Toast.makeText(this, "TODO: Decode most recent", Toast.LENGTH_SHORT)
                         .show();
                 break;
-            // action with ID action_settings was selected
+
             case R.id.action_decode_message_all:
                 Toast.makeText(this, "TODO: Decode all", Toast.LENGTH_SHORT)
                         .show();
