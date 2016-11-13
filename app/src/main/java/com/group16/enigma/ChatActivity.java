@@ -32,7 +32,9 @@ import static com.group16.enigma.MainActivity.mUsername;
 
 public class ChatActivity extends AppCompatActivity {
 
+    //Firebase object
     private DatabaseReference mFirebaseDatabaseReference;
+    //*The message child in the console
     private FirebaseRecyclerAdapter<Message, MessageViewHolder> mFirebaseAdapter;
     private ProgressBar mProgressBar;
     private LinearLayoutManager mLinearLayoutManager;
@@ -40,15 +42,34 @@ public class ChatActivity extends AppCompatActivity {
     private EditText mMessageEditText;
     private Button mSendButton;
 
+    //*General string used for writing all messages
     public static final String MESSAGES_CHILD = "messages";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 200;
 
+    /*Current database structure:
+        Messages (Free for all group chat)
+            User + message
+    */
+
+    /*Reformat database structure to:
+        User1 (accessible only to User1 on login, created on sign up)
+            Friend1 (created when a new friend is added)
+                Messages1
+            Friend2
+                Messages2
+        User2
+            Friend1
+                Messages3
+            Friend3
+                Messages4
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //*What does this intent do?
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
 
