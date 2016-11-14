@@ -157,15 +157,17 @@ public class ChatActivity extends AppCompatActivity {
 
                 try {
                     cipherTextIvMac = Aes.encrypt(mMessageEditText.getText().toString(), keys);
-
                     ciphertextString = cipherTextIvMac.toString();
+                    Log.v("///Key:", keys.toString());
+                    Log.v("///Str:", ciphertextString);
+
                 }catch (GeneralSecurityException e) {
                     e.printStackTrace();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
 
-                Log.v("///////", ciphertextString);
+
                 Message message = new Message(ciphertextString, mUsername,
                         null);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
@@ -182,13 +184,14 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        String hardcodeSalt = "VMq4oX7rxhRS8r0vwWEc2uspgsu/rpF7G+mw3vgtUzrAcsNGHQJb+DKXDrolxUTBGpq8XAkKRUWN5ZeSRUi7dSYavjO/gwErrDv2sDzoEaTvQCXLNpAhm6cwxLidAw3nTOY/wITpY4DiZzbV8bMatUjhCRPsujBHZY8CqD0oTbU=";
         try{
-            keys = Aes.generateKeyFromPassword("TEST", salt);
+            keys = Aes.generateKeyFromPassword("TEST", hardcodeSalt);
         }catch(GeneralSecurityException e){
             e.printStackTrace();
         }
 
-        Log.v("///////",decypherText("zn37aZy1s0UbQJ8pqIHGGw==:zsigYai75A1hTF5DBMQ2Y0F2h4j46pvBDN/M67LlGj8=:C5KZ2xsJMHTZbYPqCohOtg=="));
+
     }
 
     @Override
@@ -206,8 +209,8 @@ public class ChatActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_decode_message:
-                Toast.makeText(this, "TODO: Decode most recent", Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(this, "TODO: Decode most recent", Toast.LENGTH_SHORT)
+//                        .show();
 
                 refreshFirebaseAdapter(true);
 
@@ -215,8 +218,9 @@ public class ChatActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_decode_message_all:
-                Toast.makeText(this, "TODO: Decode all", Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(this, "TODO: Decode all", Toast.LENGTH_SHORT)
+//                        .show();
+                refreshFirebaseAdapter(false);
                 break;
             default:
                 break;
@@ -236,7 +240,8 @@ public class ChatActivity extends AppCompatActivity {
                 protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
                     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                     if (mFirebaseAdapter.getItemCount() - 1 == position)
-                        viewHolder.messageTextView.setText(friendlyMessage.getText() + " Last TEXT");
+
+                        viewHolder.messageTextView.setText(decypherText(friendlyMessage.getText()));
                     else
                         viewHolder.messageTextView.setText(friendlyMessage.getText());
                     viewHolder.messengerTextView.setText(friendlyMessage.getName());
@@ -260,7 +265,7 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
                     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                    viewHolder.messageTextView.setText(friendlyMessage.getText());
+                    viewHolder.messageTextView.setText(decypherText(friendlyMessage.getText()));
                     viewHolder.messengerTextView.setText(friendlyMessage.getName());
                     if (friendlyMessage.getPhotoUrl() == null) {
                         viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
@@ -274,12 +279,14 @@ public class ChatActivity extends AppCompatActivity {
             };
         }
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+
     }
 
     private String decypherText(String message){
+
+
         String decryptedMessage = "";
         try {
-            Log.v("////", keys.toString());
             decryptedMessage = Aes.decryptString(new Aes.CipherTextIvMac(message), keys);
 
         }catch(UnsupportedEncodingException e){
