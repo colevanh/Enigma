@@ -1,5 +1,11 @@
 package com.group16.enigma;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +32,9 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.group16.enigma.MainActivity.mUsername;
@@ -40,6 +49,13 @@ public class ChatActivity extends AppCompatActivity {
     private EditText mMessageEditText;
     private Button mSendButton;
 
+    // AES Variables
+    private String ciphertextString;
+    private String passPhrase = "TEST";
+    private String decryptedStr;
+    private Aes.SecretKeys keys;
+    private Aes.CipherTextIvMac cipherTextIvMac;
+
     public static final String MESSAGES_CHILD = "messages";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 200;
 
@@ -47,6 +63,43 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Encryption");
+        alert.setMessage("Please Choose Passphrase To Encrypt Conversation");
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                passPhrase = input.getText().toString();
+                // Do something with value!
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+                //passPhrase = "TEST";
+            }
+        });
+
+        alert.show();
+
+        String salt = null;
+        try {
+            salt = Aes.saltString(Aes.generateSalt());
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+        //If you generated the key from a password, you can store the salt and not the key.
+        try {
+            keys = Aes.generateKeyFromPassword("TEST", salt);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
@@ -126,7 +179,17 @@ public class ChatActivity extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = new Message(mMessageEditText.getText().toString(), mUsername,
+                try {
+                    //encrypt
+                    cipherTextIvMac = Aes.encrypt(mMessageEditText.getText().toString(), keys);
+                    //store or send to server
+                    ciphertextString = cipherTextIvMac.toString();
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                Message message = new Message(ciphertextString, mUsername,
                         null);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
                 mMessageEditText.setText("");
