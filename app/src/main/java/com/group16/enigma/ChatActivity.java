@@ -47,6 +47,7 @@ public class ChatActivity extends AppCompatActivity {
     private Aes.SecretKeys keys;
     private Aes.CipherTextIvMac cipherTextIvMac;
     private String ciphertextString;
+    private boolean isDecrypting = false;
 
     //*General string used for writing all messages
     public static final String MESSAGES_CHILD = "messages";
@@ -159,8 +160,6 @@ public class ChatActivity extends AppCompatActivity {
                 try {
                     cipherTextIvMac = Aes.encrypt(mMessageEditText.getText().toString(), keys);
                     ciphertextString = cipherTextIvMac.toString();
-                    Log.v("///Key:", keys.toString());
-                    Log.v("///Str:", ciphertextString);
 
                 }catch (GeneralSecurityException e) {
                     e.printStackTrace();
@@ -230,6 +229,10 @@ public class ChatActivity extends AppCompatActivity {
         return true;
     }
     private void refreshFirebaseAdapter(boolean isAll){
+        if(isDecrypting){
+            return;
+        }
+        isDecrypting = true;
         if(isAll) {
             mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                     Message.class,
@@ -280,7 +283,7 @@ public class ChatActivity extends AppCompatActivity {
             };
         }
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
-
+        isDecrypting = false;
     }
 
     private String decypherText(String message){
@@ -295,7 +298,6 @@ public class ChatActivity extends AppCompatActivity {
         }catch(GeneralSecurityException e){
             e.printStackTrace();
         }
-        Log.v("////", decryptedMessage + " ....");
         return decryptedMessage;
     }
 
