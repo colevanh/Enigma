@@ -165,6 +165,7 @@ public class ChatActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                Log.v("///////", ciphertextString);
                 Message message = new Message(ciphertextString, mUsername,
                         null);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
@@ -187,6 +188,7 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Log.v("///////",decypherText("zn37aZy1s0UbQJ8pqIHGGw==:zsigYai75A1hTF5DBMQ2Y0F2h4j46pvBDN/M67LlGj8=:C5KZ2xsJMHTZbYPqCohOtg=="));
     }
 
     @Override
@@ -223,37 +225,70 @@ public class ChatActivity extends AppCompatActivity {
         return true;
     }
     private void refreshFirebaseAdapter(boolean isAll){
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
-                Message.class,
-                R.layout.item_message,
-                MessageViewHolder.class,
-                mFirebaseDatabaseReference.child(MESSAGES_CHILD)){
+        if(isAll) {
+            mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+                    Message.class,
+                    R.layout.item_message,
+                    MessageViewHolder.class,
+                    mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
 
-            @Override
-            protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-
-                viewHolder.messageTextView.setText(decypherText(friendlyMessage.getText()));
-                viewHolder.messengerTextView.setText(friendlyMessage.getName());
-                if (friendlyMessage.getPhotoUrl() == null) {
-                    viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
-                            R.drawable.bird));
-                } else {
-                    Glide.with(ChatActivity.this)
-                            .load(friendlyMessage.getPhotoUrl())
-                            .into(viewHolder.messengerImageView);
+                @Override
+                protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
+                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    if (mFirebaseAdapter.getItemCount() - 1 == position)
+                        viewHolder.messageTextView.setText(friendlyMessage.getText() + " Last TEXT");
+                    else
+                        viewHolder.messageTextView.setText(friendlyMessage.getText());
+                    viewHolder.messengerTextView.setText(friendlyMessage.getName());
+                    if (friendlyMessage.getPhotoUrl() == null) {
+                        viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
+                                R.drawable.bird));
+                    } else {
+                        Glide.with(ChatActivity.this)
+                                .load(friendlyMessage.getPhotoUrl())
+                                .into(viewHolder.messengerImageView);
+                    }
                 }
-            }
-        };
+            };
+        } else{
+            mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+                    Message.class,
+                    R.layout.item_message,
+                    MessageViewHolder.class,
+                    mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
 
+                @Override
+                protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
+                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    viewHolder.messageTextView.setText(friendlyMessage.getText());
+                    viewHolder.messengerTextView.setText(friendlyMessage.getName());
+                    if (friendlyMessage.getPhotoUrl() == null) {
+                        viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
+                                R.drawable.bird));
+                    } else {
+                        Glide.with(ChatActivity.this)
+                                .load(friendlyMessage.getPhotoUrl())
+                                .into(viewHolder.messengerImageView);
+                    }
+                }
+            };
+        }
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
     }
 
     private String decypherText(String message){
+        String decryptedMessage = "";
+        try {
+            Log.v("////", keys.toString());
+            decryptedMessage = Aes.decryptString(new Aes.CipherTextIvMac(message), keys);
 
-
-
-        return "";
+        }catch(UnsupportedEncodingException e){
+            e.printStackTrace();
+        }catch(GeneralSecurityException e){
+            e.printStackTrace();
+        }
+        Log.v("////", decryptedMessage + " ....");
+        return decryptedMessage;
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
