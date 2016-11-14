@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseUser;
+
 /**
  * Created by Hayde on 22-Oct-16.
  */
@@ -23,18 +25,19 @@ public class ChatListFragment extends Fragment {
 
         // Defined Array values to show in ListView
         String[] values = new String[] {
-                "Bill Gates",
-                "Steve Jobs",
-                "Elon Musk",
-                "Larry Page",
-                "Spongebob Squarepants",
+                //"Bill Gates",
+                //"Steve Jobs",
+                //"Elon Musk",
+                //"Larry Page",
+                //"Spongebob Squarepants",
+                "h@d.com",
         };
 
         int[] tempDp = new int[]{
-                R.drawable.bat,
-                R.drawable.bird,
-                R.drawable.fish,
-                R.drawable.kangaroo,
+                //R.drawable.bat,
+                //R.drawable.bird,
+                //R.drawable.fish,
+                //R.drawable.kangaroo,
                 R.drawable.shark
 
         };

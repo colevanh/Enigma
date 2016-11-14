@@ -52,16 +52,17 @@ public class ChatActivity extends AppCompatActivity {
     */
 
     /*Reformat database structure to:
+        AllMessages
+            Messages1
+            Messages2
+            Messages3
+            Messages4
         User1 (accessible only to User1 on login, created on sign up)
-            Friend1 (created when a new friend is added)
-                Messages1
-            Friend2
-                Messages2
+            Friend1 - Reference to Messages1 (Unique history of msgs between User1 and Friend1)
+            Friend2 - Reference to Messages2
         User2
-            Friend1
-                Messages3
-            Friend3
-                Messages4
+            Friend1 - Reference to Messages3
+            Friend3 - Reference to Messages4
     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
