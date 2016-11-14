@@ -172,6 +172,7 @@ public class ChatActivity extends AppCompatActivity {
                         null);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
                 mMessageEditText.setText("");
+                mFirebaseAdapter.notifyDataSetChanged();
             }
         });
 
