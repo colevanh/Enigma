@@ -20,8 +20,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 public class MainActivity extends AppCompatActivity {
+
+    //Create new reference to database
+    private DatabaseReference userRef;
 
     ListView listView ;
     private FirebaseAuth mFirebaseAuth;
@@ -56,10 +60,13 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+            //Click will create new chat with friend
             @Override
             public void onClick(View view) {
+                //User user1 = new User("mich@test.com", )
                 Snackbar.make(view, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
