@@ -6,7 +6,7 @@ package com.group16.enigma;
 
 public class Friend {
     //TODO: May need to create seperate class that holds all messages
-    public class Messages;
+    //public class Messages()
     public Friend() {
 
     }

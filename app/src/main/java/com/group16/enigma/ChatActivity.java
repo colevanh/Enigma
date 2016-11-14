@@ -26,6 +26,9 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.group16.enigma.MainActivity.mUsername;
@@ -41,10 +44,14 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView mMessageRecyclerView;
     private EditText mMessageEditText;
     private Button mSendButton;
+    private Aes.SecretKeys keys;
+    private Aes.CipherTextIvMac cipherTextIvMac;
+    private String ciphertextString;
 
     //*General string used for writing all messages
     public static final String MESSAGES_CHILD = "messages";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 200;
+
 
     /*Current database structure:
         Messages (Free for all group chat)
@@ -147,12 +154,38 @@ public class ChatActivity extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = new Message(mMessageEditText.getText().toString(), mUsername,
+
+                try {
+                    cipherTextIvMac = Aes.encrypt(mMessageEditText.getText().toString(), keys);
+
+                    ciphertextString = cipherTextIvMac.toString();
+                }catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                Message message = new Message(ciphertextString, mUsername,
                         null);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
                 mMessageEditText.setText("");
             }
         });
+
+
+        String salt = null;
+        try{
+            salt = Aes.saltString(Aes.generateSalt());
+
+        }catch(GeneralSecurityException e){
+            e.printStackTrace();
+        }
+
+        try{
+            keys = Aes.generateKeyFromPassword("TEST", salt);
+        }catch(GeneralSecurityException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -173,6 +206,10 @@ public class ChatActivity extends AppCompatActivity {
             case R.id.action_decode_message:
                 Toast.makeText(this, "TODO: Decode most recent", Toast.LENGTH_SHORT)
                         .show();
+
+                refreshFirebaseAdapter(true);
+
+
                 break;
 
             case R.id.action_decode_message_all:
@@ -184,6 +221,39 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+    private void refreshFirebaseAdapter(boolean isAll){
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+                Message.class,
+                R.layout.item_message,
+                MessageViewHolder.class,
+                mFirebaseDatabaseReference.child(MESSAGES_CHILD)){
+
+            @Override
+            protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
+                viewHolder.messageTextView.setText(decypherText(friendlyMessage.getText()));
+                viewHolder.messengerTextView.setText(friendlyMessage.getName());
+                if (friendlyMessage.getPhotoUrl() == null) {
+                    viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
+                            R.drawable.bird));
+                } else {
+                    Glide.with(ChatActivity.this)
+                            .load(friendlyMessage.getPhotoUrl())
+                            .into(viewHolder.messengerImageView);
+                }
+            }
+        };
+
+        mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+    }
+
+    private String decypherText(String message){
+
+
+
+        return "";
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
