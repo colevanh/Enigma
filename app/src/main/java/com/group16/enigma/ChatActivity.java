@@ -50,7 +50,7 @@ public class ChatActivity extends AppCompatActivity {
     private boolean isDecrypting = false;
 
     //*General string used for writing all messages
-    public static final String MESSAGES_CHILD = "messages";
+    public static String MESSAGES_CHILD = "messages";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 200;
 
 
@@ -84,6 +84,7 @@ public class ChatActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(name);
 
+        MESSAGES_CHILD = name.replace(".", "");
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
