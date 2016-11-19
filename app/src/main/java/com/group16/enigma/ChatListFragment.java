@@ -25,20 +25,32 @@ public class ChatListFragment extends Fragment {
 
         // Defined Array values to show in ListView
         String[] values = new String[] {
+                "a@b.com",
+                "arminv94@gmail.com",
+                "colevanh@gmail.com",
                 "h@d.com",
-                "Bill Gates",
-                "Steve Jobs",
-                "Elon Musk",
-                "Spongebob Squarepants"
+                "hello@hello.com",
+                "mich@test.com",
+                "michaella.sheng@gmail.com",
+                "rudr.tandon@gnail.com",
+                "tmelano82@gmail.com",
+                //"Bill Gates",
+                //"Steve Jobs",
+                //"Elon Musk",
+                //"Spongebob Squarepants"
         };
 
+        //TODO:Once user is added, add an icon for them so we don't have to manually add in code
         int[] tempDp = new int[]{
                 R.drawable.bat,
                 R.drawable.bird,
                 R.drawable.fish,
                 R.drawable.kangaroo,
-                R.drawable.shark
-
+                R.drawable.shark,
+                R.drawable.butterfly,
+                R.drawable.bee,
+                R.drawable.gorilla,
+                R.drawable.dog
         };
 
         listView.setAdapter(new ChatListAdapter(getContext(), values, tempDp));

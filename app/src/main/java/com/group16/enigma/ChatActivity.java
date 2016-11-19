@@ -53,12 +53,6 @@ public class ChatActivity extends AppCompatActivity {
     public static String MESSAGES_CHILD = "messages";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 200;
 
-
-    /*Current database structure:
-        Messages (Free for all group chat)
-            User + message
-    */
-
     /*Reformat database structure to:
         AllMessages
             Messages1
@@ -78,12 +72,13 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //*What does this intent do?
+        //What does this intent do?
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
 
         getSupportActionBar().setTitle(name);
 
+        //What does this do?
         MESSAGES_CHILD = name.replace(".", "");
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -91,7 +86,9 @@ public class ChatActivity extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
+        //Only need to call reference once?
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                 Message.class,
                 R.layout.item_message,
@@ -289,8 +286,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private String decypherText(String message){
-
-
         String decryptedMessage = "";
         try {
             decryptedMessage = Aes.decryptString(new Aes.CipherTextIvMac(message), keys);
