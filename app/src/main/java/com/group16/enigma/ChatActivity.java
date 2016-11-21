@@ -228,12 +228,15 @@ public class ChatActivity extends AppCompatActivity {
         return true;
     }
     private void refreshFirebaseAdapter(boolean isAll){
+
+        FirebaseRecyclerAdapter<Message, MessageViewHolder> tempAdapter;
         if(isDecrypting){
             return;
         }
         isDecrypting = true;
+
         if(isAll) {
-            mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+            tempAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                     Message.class,
                     R.layout.item_message,
                     MessageViewHolder.class,
@@ -242,7 +245,7 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
                     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                    if (mFirebaseAdapter.getItemCount() - 1 == position)
+                    if (this.getItemCount() - 1 == position)
 
                         viewHolder.messageTextView.setText(decypherText(friendlyMessage.getText()));
                     else
@@ -259,7 +262,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
             };
         } else{
-            mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+            tempAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                     Message.class,
                     R.layout.item_message,
                     MessageViewHolder.class,
@@ -281,7 +284,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
             };
         }
-        mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+        mMessageRecyclerView.swapAdapter(tempAdapter, true);
         isDecrypting = false;
     }
 
