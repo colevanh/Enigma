@@ -56,6 +56,7 @@ public class ChatActivity extends AppCompatActivity {
     /*Reformat database structure to:
         AllMessages
             Messages1
+                Key
             Messages2
             Messages3
             Messages4
@@ -72,13 +73,11 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //What does this intent do?
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
 
         getSupportActionBar().setTitle(name);
 
-        //What does this do?
         MESSAGES_CHILD = name.replace(".", "");
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -86,7 +85,6 @@ public class ChatActivity extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        //Only need to call reference once?
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
