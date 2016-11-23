@@ -84,13 +84,14 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
+        String reference= intent.getStringExtra("reference");
 
         getSupportActionBar().setTitle(name);
 
         //What does this do?
         //MESSAGES_CHILD = name.replace(".", "");
         MESSAGES_CHILD = "messages";
-        MESSAGES_HASH = "422452734";
+        MESSAGES_HASH = reference;
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
@@ -193,20 +194,6 @@ public class ChatActivity extends AppCompatActivity {
 //
 //        mFirebaseDatabaseReference.child("chat").child("422452734").child("key").setValue(chattest);
 
-        String salt = null;
-        try{
-            salt = Aes.saltString(Aes.generateSalt());
-
-        }catch(GeneralSecurityException e){
-            e.printStackTrace();
-        }
-
-        String hardcodeSalt = "VMq4oX7rxhRS8r0vwWEc2uspgsu/rpF7G+mw3vgtUzrAcsNGHQJb+DKXDrolxUTBGpq8XAkKRUWN5ZeSRUi7dSYavjO/gwErrDv2sDzoEaTvQCXLNpAhm6cwxLidAw3nTOY/wITpY4DiZzbV8bMatUjhCRPsujBHZY8CqD0oTbU=";
-        try{
-            keys = Aes.generateKeyFromPassword("TEST", hardcodeSalt);
-        }catch(GeneralSecurityException e){
-            e.printStackTrace();
-        }
 
         promptPassword();
 
@@ -227,10 +214,25 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 userKey = input.getText().toString();
+
+
+                String hardcodeSalt = "VMq4oX7rxhRS8r0vwWEc2uspgsu/rpF7G+mw3vgtUzrAcsNGHQJb+DKXDrolxUTBGpq8XAkKRUWN5ZeSRUi7dSYavjO/gwErrDv2sDzoEaTvQCXLNpAhm6cwxLidAw3nTOY/wITpY4DiZzbV8bMatUjhCRPsujBHZY8CqD0oTbU=";
+                try{
+                    //KEY IS TEST
+                    if(input.length() == 0 || input.equals("")) {
+                        keys = Aes.generateKeyFromPassword("EMPTYKEY", hardcodeSalt);
+                    }else {
+                        keys = Aes.generateKeyFromPassword(userKey, hardcodeSalt);
+                    }
+                }catch(GeneralSecurityException e){
+                    e.printStackTrace();
+                }
             }
         });
 
         builder.show();
+
+
     }
 
 
