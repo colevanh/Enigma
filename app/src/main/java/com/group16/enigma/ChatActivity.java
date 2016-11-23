@@ -65,6 +65,7 @@ public class ChatActivity extends AppCompatActivity {
     /*Reformat database structure to:
         AllMessages
             Messages1
+                Key
             Messages2
             Messages3
             Messages4
@@ -81,7 +82,6 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //What does this intent do?
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
 
@@ -90,7 +90,7 @@ public class ChatActivity extends AppCompatActivity {
         //What does this do?
         //MESSAGES_CHILD = name.replace(".", "");
         MESSAGES_CHILD = "messages";
-        MESSAGES_HASH = "423472384";
+        MESSAGES_HASH = "423472384"
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);

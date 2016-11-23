@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static String mUsername;
 
     @Override
+    //TODO:in onCreate, create a User object for each user account
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
