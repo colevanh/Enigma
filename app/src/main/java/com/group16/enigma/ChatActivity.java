@@ -1,5 +1,6 @@
 package com.group16.enigma;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
@@ -18,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -89,7 +91,6 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(name);
 
         //What does this do?
-        //MESSAGES_CHILD = name.replace(".", "");
         MESSAGES_CHILD = "messages";
         MESSAGES_HASH = reference;
 
@@ -232,13 +233,12 @@ public class ChatActivity extends AppCompatActivity {
 
         builder.show();
 
-
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
 
-    public int hash(String v1, String v2) {
-        return v1.hashCode() ^ v2.hashCode();
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -255,35 +255,27 @@ public class ChatActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_decode_message:
-//                Toast.makeText(this, "TODO: Decode most recent", Toast.LENGTH_SHORT)
-//                        .show();
-                if(verified)
-                    refreshFirebaseAdapter(true);
-
+                refreshFirebaseAdapter(true);
 
                 break;
 
             case R.id.action_decode_message_all:
-//                Toast.makeText(this, "TODO: Decode all", Toast.LENGTH_SHORT)
-//                        .show();
-                if(verified)
-                    refreshFirebaseAdapter(false);
-                break;
+                refreshFirebaseAdapter(false);
             default:
                 break;
         }
 
         return true;
     }
-    private void refreshFirebaseAdapter(boolean isAll){
+    private void refreshFirebaseAdapter(boolean recentOnly){
 
         FirebaseRecyclerAdapter<Message, MessageViewHolder> tempAdapter;
         if(isDecrypting){
             return;
         }
         isDecrypting = true;
-
-        if(isAll) {
+        //Decrypt recent message only
+        if(recentOnly) {
             tempAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                     Message.class,
                     R.layout.item_message,
@@ -293,11 +285,17 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
                     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                    if (this.getItemCount() - 1 == position)
 
-                        viewHolder.messageTextView.setText(decypherText(friendlyMessage.getText()));
-                    else
+                    String decypheredText = decypherText(friendlyMessage.getText());
+
+                    if (this.getItemCount() - 1 == position) {
+                        if(decypheredText == "")
+                            viewHolder.messageTextView.setText(friendlyMessage.getText());
+                        else
+                            viewHolder.messageTextView.setText(decypheredText);
+                    }else {
                         viewHolder.messageTextView.setText(friendlyMessage.getText());
+                    }
                     viewHolder.messengerTextView.setText(friendlyMessage.getName());
                     if (friendlyMessage.getPhotoUrl() == null) {
                         viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
@@ -309,6 +307,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 }
             };
+        //Decrypt ALL
         } else{
             tempAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                     Message.class,
@@ -319,7 +318,11 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
                     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                    viewHolder.messageTextView.setText(decypherText(friendlyMessage.getText()));
+                    String decypheredText = decypherText(friendlyMessage.getText());
+                    if(decypheredText == "")
+                        viewHolder.messageTextView.setText(friendlyMessage.getText());
+                    else
+                        viewHolder.messageTextView.setText(decypheredText);
                     viewHolder.messengerTextView.setText(friendlyMessage.getName());
                     if (friendlyMessage.getPhotoUrl() == null) {
                         viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,

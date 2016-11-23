@@ -78,12 +78,36 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
                 String friendName = "a@q.com";
                 String friendName2 = "c@d.com";
+
+                //Create fake shared conversations (delete when ready)
                 mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName.replace(".","")).setValue(new Conversation("423472384", "a@q.com"));
                 mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName2.replace(".","")).setValue(new Conversation("422452734", "c@d.com"));
+
+                startConversationwithHayden();
             }
         });
 
 
+    }
+
+    private void startConversationwithHayden() {
+        String friendName = "hayden@enigma.com";
+
+        //Generate unique hash between two friends
+        int hash = hash(friendName, mUsername);
+
+        Log.v("/////", "HASH:" + hash);
+
+        //Adds conversation under user for current user
+        mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName.replace(".","")).setValue(new Conversation(Integer.toString(hash), friendName));
+
+        //Adds conversation under user for friend
+        mFirebaseDatabaseReference.child("user").child(friendName.replace(".","")).child("conversations").child(mUsername.replace(".","")).setValue(new Conversation(Integer.toString(hash), mUsername));
+
+    }
+
+    public int hash(String v1, String v2) {
+        return v1.hashCode() ^ v2.hashCode();
     }
 
     @Override
