@@ -10,27 +10,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * Created by Hayde on 22-Oct-16.
  */
 
 public class ChatListAdapter extends BaseAdapter {
-    String [] result;
     Context context;
-    int [] imageId;
+    List<Conversation> conversationList;
     private static LayoutInflater inflater=null;
-    public ChatListAdapter(Context mainActivity, String[] nameList, int[] prgmImages) {
+    public ChatListAdapter(Context mainActivity, List<Conversation> conversationList) {
         // TODO Auto-generated constructor stub
-        result=nameList;
         context=mainActivity;
-        imageId=prgmImages;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.conversationList = conversationList;
     }
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return result.length;
+        return conversationList.size();
     }
 
     @Override
@@ -58,15 +58,16 @@ public class ChatListAdapter extends BaseAdapter {
         rowView = inflater.inflate(R.layout.item_chat, null);
         holder.tv=(TextView) rowView.findViewById(R.id.item_chat_friend_name);
         holder.img=(ImageView) rowView.findViewById(R.id.item_chat_friend_dp);
-        holder.tv.setText(result[position]);
-        holder.img.setImageResource(imageId[position]);
+        holder.tv.setText(conversationList.get(position).friend);
+        holder.img.setImageResource(R.drawable.bee);
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //Navigate to chat page
                 Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("name", result[position]);
+                intent.putExtra("name", conversationList.get(position).friend);
+                intent.putExtra("reference", conversationList.get(position).reference);
                 context.startActivity(intent);
             }
         });

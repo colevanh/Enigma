@@ -90,7 +90,7 @@ public class ChatActivity extends AppCompatActivity {
         //What does this do?
         //MESSAGES_CHILD = name.replace(".", "");
         MESSAGES_CHILD = "messages";
-        MESSAGES_HASH = "423472384";
+        MESSAGES_HASH = "422452734";
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);

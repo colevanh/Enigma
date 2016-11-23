@@ -77,8 +77,9 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 String friendName = "a@q.com";
+                String friendName2 = "c@d.com";
                 mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName.replace(".","")).setValue(new Conversation("423472384", "a@q.com"));
-
+                mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName2.replace(".","")).setValue(new Conversation("422452734", "c@d.com"));
             }
         });
 

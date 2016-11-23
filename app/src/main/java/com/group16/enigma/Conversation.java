@@ -12,4 +12,14 @@ public class Conversation {
         reference = ref;
         friend = f;
     }
+
+    public Conversation(){}
+
+    public void setReference(String ref){
+        reference = ref;
+    }
+
+    public void setFriend(String fri){
+        friend = fri;
+    }
 }
