@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +44,29 @@ public class FriendsFragment extends Fragment {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot user : dataSnapshot.getChildren()) {
+//                    username = user.getKey();
+//                    list.add(username);
+//                }
+//                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
+//                        android.R.layout.simple_list_item_1, list);
+//                lv.setAdapter(arrayAdapter);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        mDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String string) {
+
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 for (DataSnapshot user : dataSnapshot.getChildren()) {
                     username = user.getKey();
                     list.add(username);
@@ -52,8 +76,19 @@ public class FriendsFragment extends Fragment {
                 lv.setAdapter(arrayAdapter);
             }
             @Override
+            //TODO:FIX
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                    username = user.getKey();
+                    list.remove(username);
+                }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
+                        android.R.layout.simple_list_item_1, list);
+                lv.setAdapter(arrayAdapter);
+            }
+            @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                System.out.println("The child read failed: " + databaseError.getCode());
             }
         });
         return v;
