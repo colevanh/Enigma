@@ -19,6 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -38,6 +44,8 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
 
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    private DatabaseReference mFirebaseDatabaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +60,8 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
         findViewById(R.id.email_create_account_button).setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
+
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -90,7 +100,7 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
         if (!validateForm()) {
             return;
         }
-
+        final String userEmail = email;
         showProgressDialog();
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -105,7 +115,14 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
                         if (!task.isSuccessful()) {
                             Toast.makeText(SignInActivity.this, "Auth Failed",
                                     Toast.LENGTH_SHORT).show();
+                        } else{
+                            Map<String, String> userInfo = new HashMap<>();
+                            userInfo.put("name", userEmail);
+                            userInfo.put("img", generateRandomDP());
+                            mFirebaseDatabaseReference.child("user").child(userEmail.replace(".","")).setValue(userInfo);
                         }
+
+
 
                         hideProgressDialog();
                     }
@@ -140,6 +157,14 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
                 });
     }
 
+    private String generateRandomDP(){
+        String[] imgName = new String[]{"bat.png", "bee.png", "bird.png", "butterfly.png", "dog.png",
+        "dolphin.png", "duck.png", "fish.png", "gorilla.png", "kangaroo.png", "kiwi.png", "rabbit.png",
+        "shark.png", "snail.png", "turtle.png"};
+        Random random = new Random();
+        int index = random.nextInt(imgName.length);
+        return imgName[index];
+    }
     private boolean validateForm() {
         boolean valid = true;
 

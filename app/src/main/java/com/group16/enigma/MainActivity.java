@@ -21,6 +21,10 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,10 +35,12 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private String mPhotoUrl;
+    private DatabaseReference mFirebaseDatabaseReference;
 
     public static String mUsername;
 
     @Override
+    //TODO:in onCreate, create a User object for each user account
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -43,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         if (mFirebaseUser == null) {
             startActivity(new Intent(this, SignInActivity.class));
@@ -69,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
                 //User user1 = new User("mich@test.com", )
                 Snackbar.make(view, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                String friendName = "a@q.com";
+                mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName.replace(".","")).setValue(new Conversation("423472384", "a@q.com"));
+
             }
         });
 

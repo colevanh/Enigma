@@ -1,7 +1,9 @@
 package com.group16.enigma;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,10 +12,12 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -28,6 +32,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -48,20 +54,18 @@ public class ChatActivity extends AppCompatActivity {
     private Aes.CipherTextIvMac cipherTextIvMac;
     private String ciphertextString;
     private boolean isDecrypting = false;
+    private String userKey;
+    private boolean verified = true;
 
     //*General string used for writing all messages
     public static String MESSAGES_CHILD = "messages";
+    public String MESSAGES_HASH;
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 200;
-
-
-    /*Current database structure:
-        Messages (Free for all group chat)
-            User + message
-    */
 
     /*Reformat database structure to:
         AllMessages
             Messages1
+                Key
             Messages2
             Messages3
             Messages4
@@ -78,25 +82,29 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //*What does this intent do?
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
 
         getSupportActionBar().setTitle(name);
 
-        MESSAGES_CHILD = name.replace(".", "");
+        //What does this do?
+        //MESSAGES_CHILD = name.replace(".", "");
+        MESSAGES_CHILD = "messages";
+        MESSAGES_HASH = "423472384";
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
+        //Only need to call reference once?
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                 Message.class,
                 R.layout.item_message,
                 MessageViewHolder.class,
-                mFirebaseDatabaseReference.child(MESSAGES_CHILD)){
+                mFirebaseDatabaseReference.child("chat").child(MESSAGES_HASH).child(MESSAGES_CHILD)){
 
             @Override
             protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
@@ -171,12 +179,19 @@ public class ChatActivity extends AppCompatActivity {
 
                 Message message = new Message(ciphertextString, mUsername,
                         null);
-                mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
+                mFirebaseDatabaseReference.child("chat").child(MESSAGES_HASH).child(MESSAGES_CHILD).push().setValue(message);
                 mMessageEditText.setText("");
                 mFirebaseAdapter.notifyDataSetChanged();
             }
         });
 
+        //mFirebaseDatabaseReference.child("chat").child("somekey").child("key").push().setValue("Hello");
+
+//        Map<String, String> chattest = new HashMap<String, String>();
+//        chattest.put("key", "orange");
+//        chattest.put("salt", "somelongsalt");
+//
+//        mFirebaseDatabaseReference.child("chat").child("422452734").child("key").setValue(chattest);
 
         String salt = null;
         try{
@@ -193,7 +208,34 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        promptPassword();
 
+    }
+
+    private void promptPassword() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter the key");
+        View viewInflated = getLayoutInflater().inflate(R.layout.dialog_key, null);
+
+        final EditText input = (EditText) viewInflated.findViewById(R.id.user_key);
+
+        builder.setView(viewInflated);
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                userKey = input.getText().toString();
+            }
+        });
+
+        builder.show();
+    }
+
+
+    public int hash(String v1, String v2) {
+        return v1.hashCode() ^ v2.hashCode();
     }
 
     @Override
@@ -213,8 +255,8 @@ public class ChatActivity extends AppCompatActivity {
             case R.id.action_decode_message:
 //                Toast.makeText(this, "TODO: Decode most recent", Toast.LENGTH_SHORT)
 //                        .show();
-
-                refreshFirebaseAdapter(true);
+                if(verified)
+                    refreshFirebaseAdapter(true);
 
 
                 break;
@@ -222,7 +264,8 @@ public class ChatActivity extends AppCompatActivity {
             case R.id.action_decode_message_all:
 //                Toast.makeText(this, "TODO: Decode all", Toast.LENGTH_SHORT)
 //                        .show();
-                refreshFirebaseAdapter(false);
+                if(verified)
+                    refreshFirebaseAdapter(false);
                 break;
             default:
                 break;
@@ -231,21 +274,24 @@ public class ChatActivity extends AppCompatActivity {
         return true;
     }
     private void refreshFirebaseAdapter(boolean isAll){
+
+        FirebaseRecyclerAdapter<Message, MessageViewHolder> tempAdapter;
         if(isDecrypting){
             return;
         }
         isDecrypting = true;
+
         if(isAll) {
-            mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+            tempAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                     Message.class,
                     R.layout.item_message,
                     MessageViewHolder.class,
-                    mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
+                    mFirebaseDatabaseReference.child("chat").child(MESSAGES_HASH).child(MESSAGES_CHILD)) {
 
                 @Override
                 protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
                     mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                    if (mFirebaseAdapter.getItemCount() - 1 == position)
+                    if (this.getItemCount() - 1 == position)
 
                         viewHolder.messageTextView.setText(decypherText(friendlyMessage.getText()));
                     else
@@ -262,11 +308,11 @@ public class ChatActivity extends AppCompatActivity {
                 }
             };
         } else{
-            mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
+            tempAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                     Message.class,
                     R.layout.item_message,
                     MessageViewHolder.class,
-                    mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
+                    mFirebaseDatabaseReference.child("chat").child(MESSAGES_HASH).child(MESSAGES_CHILD)) {
 
                 @Override
                 protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
@@ -284,13 +330,11 @@ public class ChatActivity extends AppCompatActivity {
                 }
             };
         }
-        mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+        mMessageRecyclerView.swapAdapter(tempAdapter, true);
         isDecrypting = false;
     }
 
     private String decypherText(String message){
-
-
         String decryptedMessage = "";
         try {
             decryptedMessage = Aes.decryptString(new Aes.CipherTextIvMac(message), keys);
