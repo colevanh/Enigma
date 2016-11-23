@@ -98,13 +98,13 @@ public class ChatActivity extends AppCompatActivity {
         mLinearLayoutManager.setStackFromEnd(true);
 
         //Only need to call reference once?
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("chat").child(MESSAGES_HASH);
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                 Message.class,
                 R.layout.item_message,
                 MessageViewHolder.class,
-                mFirebaseDatabaseReference.child(MESSAGES_CHILD)){
+                mFirebaseDatabaseReference.child("chat").child(MESSAGES_HASH).child(MESSAGES_CHILD)){
 
             @Override
             protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
@@ -179,7 +179,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 Message message = new Message(ciphertextString, mUsername,
                         null);
-                mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(message);
+                mFirebaseDatabaseReference.child("chat").child(MESSAGES_HASH).child(MESSAGES_CHILD).push().setValue(message);
                 mMessageEditText.setText("");
                 mFirebaseAdapter.notifyDataSetChanged();
             }
@@ -188,11 +188,10 @@ public class ChatActivity extends AppCompatActivity {
         //mFirebaseDatabaseReference.child("chat").child("somekey").child("key").push().setValue("Hello");
 
 //        Map<String, String> chattest = new HashMap<String, String>();
-//        chattest.put("key", "apple");
+//        chattest.put("key", "orange");
 //        chattest.put("salt", "somelongsalt");
 //
-//        mFirebaseDatabaseReference.child("chat").child("423472384").child("key").setValue(chattest);
-//        mFirebaseDatabaseReference.child("chat").child("423472384").child("messages").setValue(new Message("cipher string","h@d.com", null));
+//        mFirebaseDatabaseReference.child("chat").child("422452734").child("key").setValue(chattest);
 
         String salt = null;
         try{
@@ -287,7 +286,7 @@ public class ChatActivity extends AppCompatActivity {
                     Message.class,
                     R.layout.item_message,
                     MessageViewHolder.class,
-                    mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
+                    mFirebaseDatabaseReference.child("chat").child(MESSAGES_HASH).child(MESSAGES_CHILD)) {
 
                 @Override
                 protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
@@ -313,7 +312,7 @@ public class ChatActivity extends AppCompatActivity {
                     Message.class,
                     R.layout.item_message,
                     MessageViewHolder.class,
-                    mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
+                    mFirebaseDatabaseReference.child("chat").child(MESSAGES_HASH).child(MESSAGES_CHILD)) {
 
                 @Override
                 protected void populateViewHolder(MessageViewHolder viewHolder, Message friendlyMessage, int position) {
