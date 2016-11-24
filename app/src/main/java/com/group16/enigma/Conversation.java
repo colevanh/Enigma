@@ -7,7 +7,6 @@ package com.group16.enigma;
 public class Conversation {
     String reference;
     String friend;
-
     public Conversation(String ref, String f){
         reference = ref;
         friend = f;

@@ -10,7 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Hayde on 22-Oct-16.
@@ -59,7 +67,7 @@ public class ChatListAdapter extends BaseAdapter {
         holder.tv=(TextView) rowView.findViewById(R.id.item_chat_friend_name);
         holder.img=(ImageView) rowView.findViewById(R.id.item_chat_friend_dp);
         holder.tv.setText(conversationList.get(position).friend);
-        holder.img.setImageResource(R.drawable.bee);
+        setDPDrawable(conversationList.get(position).friend, holder);
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +80,65 @@ public class ChatListAdapter extends BaseAdapter {
             }
         });
         return rowView;
+    }
+
+    public static void setDPDrawable(String name, final Holder h){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(name.replace(".",""));
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> objectMap = (HashMap<String, Object>)
+                        dataSnapshot.getValue();
+                if(objectMap != null){
+                    h.img.setImageResource(getDPDrawable((String)objectMap.get("img")));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+    }
+
+    private static int getDPDrawable(String fileName){
+        switch (fileName){
+            case "bat.png":
+                return R.drawable.bat;
+            case "bee.png":
+                return R.drawable.bee;
+            case "bird.png":
+                return R.drawable.bird;
+            case "butterfly.png":
+                return R.drawable.butterfly;
+            case "dog.png":
+                return R.drawable.dog;
+            case "dolphin.png":
+                return R.drawable.dolphin;
+            case "duck.png":
+                return R.drawable.duck;
+            case "fish.png":
+                return R.drawable.fish;
+            case "gorilla.png":
+                return R.drawable.gorilla;
+            case "kangaroo.png":
+                return R.drawable.kangaroo;
+            case "kiwi.png":
+                return R.drawable.kiwi;
+            case "rabbit.png":
+                return R.drawable.rabbit;
+            case "shark.png":
+                return R.drawable.shark;
+            case "snail.png":
+                return R.drawable.snail;
+            case "turtle.png":
+                return R.drawable.turtle;
+            default:
+                return R.drawable.bird;
+
+        }
     }
 
 }
