@@ -29,8 +29,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
@@ -58,6 +61,7 @@ public class ChatActivity extends AppCompatActivity {
     private boolean isDecrypting = false;
     private String userKey;
     private boolean verified = true;
+
 
     //*General string used for writing all messages
     public static String MESSAGES_CHILD = "messages";
@@ -115,8 +119,7 @@ public class ChatActivity extends AppCompatActivity {
                 viewHolder.messageTextView.setText(friendlyMessage.getText());
                 viewHolder.messengerTextView.setText(friendlyMessage.getName());
                 if (friendlyMessage.getPhotoUrl() == null) {
-                    viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
-                            R.drawable.bird));
+                    setDPDrawable(friendlyMessage.getName(), viewHolder);
                 } else {
                     Glide.with(ChatActivity.this)
                             .load(friendlyMessage.getPhotoUrl())
@@ -299,8 +302,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
                     viewHolder.messengerTextView.setText(friendlyMessage.getName());
                     if (friendlyMessage.getPhotoUrl() == null) {
-                        viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
-                                R.drawable.bird));
+                        setDPDrawable(friendlyMessage.getName(), viewHolder);
                     } else {
                         Glide.with(ChatActivity.this)
                                 .load(friendlyMessage.getPhotoUrl())
@@ -326,8 +328,7 @@ public class ChatActivity extends AppCompatActivity {
                         viewHolder.messageTextView.setText(decypheredText);
                     viewHolder.messengerTextView.setText(friendlyMessage.getName());
                     if (friendlyMessage.getPhotoUrl() == null) {
-                        viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
-                                R.drawable.bird));
+                        setDPDrawable(friendlyMessage.getName(), viewHolder);
                     } else {
                         Glide.with(ChatActivity.this)
                                 .load(friendlyMessage.getPhotoUrl())
@@ -352,6 +353,29 @@ public class ChatActivity extends AppCompatActivity {
         }
         return decryptedMessage;
     }
+
+    public static void setDPDrawable(String name, final MessageViewHolder v){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(name.replace(".",""));
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> objectMap = (HashMap<String, Object>)
+                        dataSnapshot.getValue();
+                if(objectMap != null){
+                    int dp= ChatListAdapter.getDPDrawable((String)objectMap.get("img"));
+                    v.messengerImageView.setImageResource(dp);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+    }
+
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         public TextView messageTextView;

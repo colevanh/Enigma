@@ -68,5 +68,4 @@ public class ChatListFragment extends Fragment {
         return v;
     }
 
-
 }

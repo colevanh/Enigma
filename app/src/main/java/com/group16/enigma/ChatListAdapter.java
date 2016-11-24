@@ -103,7 +103,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     }
 
-    private static int getDPDrawable(String fileName){
+    public static int getDPDrawable(String fileName){
         switch (fileName){
             case "bat.png":
                 return R.drawable.bat;
