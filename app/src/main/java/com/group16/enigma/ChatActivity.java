@@ -88,6 +88,7 @@ public class ChatActivity extends AppCompatActivity {
         String name = intent.getStringExtra("name");
         String reference= intent.getStringExtra("reference");
 
+
         getSupportActionBar().setTitle(name);
 
         //What does this do?

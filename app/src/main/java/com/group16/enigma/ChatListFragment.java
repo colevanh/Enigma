@@ -49,8 +49,6 @@ public class ChatListFragment extends Fragment {
                             Map<String, Object> mapObj = (Map<String, Object>) obj;
                             Conversation convo = new Conversation();
                             convo.setReference((String) mapObj.get("reference"));
-                            Log.v("////", (String) mapObj.get("reference"));
-                            Log.v("////", (String) mapObj.get("friend"));
                             convo.setFriend((String) mapObj.get("friend"));
                             conversationList.add(convo);
                         }

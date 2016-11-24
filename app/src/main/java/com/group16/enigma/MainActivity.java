@@ -91,12 +91,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startConversationwithHayden() {
+        //@Michaella! Change this to whichever friend was clicked in the friends page-> it ll create a new convo with them
+        //(or just direct to the existing if its already created)
         String friendName = "hayden@enigma.com";
 
         //Generate unique hash between two friends
         int hash = hash(friendName, mUsername);
-
-        Log.v("/////", "HASH:" + hash);
 
         //Adds conversation under user for current user
         mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName.replace(".","")).setValue(new Conversation(Integer.toString(hash), friendName));
@@ -104,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
         //Adds conversation under user for friend
         mFirebaseDatabaseReference.child("user").child(friendName.replace(".","")).child("conversations").child(mUsername.replace(".","")).setValue(new Conversation(Integer.toString(hash), mUsername));
 
+        //Navigate to chat page
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        intent.putExtra("name", friendName);
+        intent.putExtra("reference", Integer.toString(hash));
+        startActivity(intent);
     }
 
     public int hash(String v1, String v2) {
