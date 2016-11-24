@@ -104,6 +104,9 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public static int getDPDrawable(String fileName){
+        if(fileName == null){
+            return R.drawable.bird;
+        }
         switch (fileName){
             case "bat.png":
                 return R.drawable.bat;
