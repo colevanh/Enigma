@@ -104,7 +104,6 @@ public class ChatActivity extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        //Only need to call reference once?
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(

@@ -2,12 +2,10 @@ package com.group16.enigma;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -24,7 +22,7 @@ import java.util.ArrayList;
  * Created by Hayde on 22-Oct-16.
  */
 
-public class FriendsFragment extends Fragment {
+public class FriendsListFragment extends Fragment {
 
     private DatabaseReference mDatabase;
     public static String username;
@@ -33,7 +31,7 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.fragment_friends, container, false);
+        final View v = inflater.inflate(R.layout.fragment_friendslist, container, false);
         final ArrayList<String> list = new ArrayList<String>();
         final ListView lv = (ListView) v.findViewById(R.id.userList);
 
