@@ -120,15 +120,16 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
                             userInfo.put("name", userEmail);
                             userInfo.put("img", generateRandomDP());
                             mFirebaseDatabaseReference.child("user").child(userEmail.replace(".","")).setValue(userInfo);
+                            createNewUser(userEmail);
                         }
-
-
-
                         hideProgressDialog();
                     }
                 });
     }
 
+    public void createNewUser(String email) {
+        User newUser = new User(email);
+    }
     private void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {

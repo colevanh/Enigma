@@ -13,12 +13,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +46,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.group16.enigma.MainActivity.mUsername;
+
 public class FriendsListAdapter extends BaseAdapter {
     Context context;
-    List<User> friendsList;
+
+    private DatabaseReference mDatabase;
+    private FirebaseUser mFirebaseUser;
+    private FirebaseAuth mFirebaseAuth;
+
+    //Test user to populate list
+    User test = new User("do@gmail.com");
+    List<User> friendsList = new ArrayList<User>();
+
     private static LayoutInflater inflater = null;
     public FriendsListAdapter(Context mainActivity, List<User> friendsList) {
         context = mainActivity;
@@ -73,27 +86,58 @@ public class FriendsListAdapter extends BaseAdapter {
         ImageView img;
     }
 
+    public int hash(String v1, String v2) {
+        return v1.hashCode() ^ v2.hashCode();
+    }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        Holder holder=new Holder();
-        View rowView;
+        final Holder holder=new Holder();
+        final View rowView;
+
+        friendsList.add(test);
+
         rowView = inflater.inflate(R.layout.item_friend, null);
         holder.tv=(TextView) rowView.findViewById(R.id.item_friend_name);
         holder.img=(ImageView) rowView.findViewById(R.id.item_friend_dp);
         holder.tv.setText(friendsList.get(position).email);
         setDPDrawable(friendsList.get(position).email, holder);
+
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Creates new chat with friend
+                //Gets username
+                mFirebaseAuth = FirebaseAuth.getInstance();
+                mFirebaseUser = mFirebaseAuth.getCurrentUser();
+                mUsername = mFirebaseUser.getEmail();
+
+                //Gets friend username
+                TextView tv = (TextView)v;
+                String friendName = tv.getText().toString();
+
+                //Generate unique hash between two friends
+                int hash = hash(friendName, mUsername);
+
+                //Adds conversation under user for current user
+                mDatabase.child("user").child(mUsername.replace(".","")).child("conversations")
+                        .child(friendName.replace(".",""))
+                        .setValue(new Conversation(Integer.toString(hash), friendName));
+
+                //Adds conversation under user for friend
+                mDatabase.child("user").child(friendName.replace(".","")).child("conversations")
+                        .child(mUsername.replace(".",""))
+                        .setValue(new Conversation(Integer.toString(hash), mUsername));
+
+                //Start new chat in chat page
                 Intent intent = new Intent(context, ChatActivity.class);
-                //Fix below
-                Conversation nConversation = new Conversation("testNewRefToConvo", "msheng@ucsd.edu");
+                intent.putExtra("name", friendName);
+                intent.putExtra("reference", Integer.toString(hash));
                 context.startActivity(intent);
             }
         });
         return rowView;
     }
+
 
     public static void setDPDrawable(String name, final Holder h){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(name.replace(".",""));

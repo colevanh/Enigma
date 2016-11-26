@@ -26,14 +26,15 @@ public class FriendsListFragment extends Fragment {
 
     private DatabaseReference mDatabase;
     public static String username;
+    private ListView lv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.fragment_friendslist, container, false);
-        final ArrayList<String> list = new ArrayList<String>();
-        final ListView lv = (ListView) v.findViewById(R.id.userList);
+        final ArrayList<String> list = new ArrayList<>();
+        lv = (ListView) v.findViewById(R.id.userList);
 
         //Get reference to database
         mDatabase = FirebaseDatabase.getInstance().getReference();

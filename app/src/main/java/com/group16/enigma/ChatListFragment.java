@@ -35,7 +35,8 @@ public class ChatListFragment extends Fragment {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_chatlist, container, false);
 
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("user").child(MainActivity.mUsername.replace(".","")).child("conversations");
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("user").child(MainActivity.mUsername.replace(".","")).child("conversations");
 
         // Attach a listener to read the data at our posts reference
         mFirebaseDatabaseReference.addValueEventListener(new ValueEventListener() {
