@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -38,31 +39,21 @@ public class FriendsFragment extends Fragment {
 
         //Get reference to database
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
+        //Listen only for user changes
+        Query mQuery = mDatabase.orderByKey().equalTo("user");
         // Attach a listener to read the data reference
-        //TODO: Modify on remove data function
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mQuery.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot user : dataSnapshot.getChildren()) {
-//                    username = user.getKey();
-//                    list.add(username);
-//                }
-//                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
-//                        android.R.layout.simple_list_item_1, list);
-//                lv.setAdapter(arrayAdapter);
-            }
+            public void onDataChange(DataSnapshot dataSnapshot) {}
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
 
-        mDatabase.addChildEventListener(new ChildEventListener() {
+        mQuery.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String string) {
-
-            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String string) {}
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
             @Override

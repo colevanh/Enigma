@@ -355,6 +355,9 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public static void setDPDrawable(String name, final MessageViewHolder v){
+        if(FirebaseDatabase.getInstance().getReference() == null) {
+            return;
+        }
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(name.replace(".",""));
 
         ref.addValueEventListener(new ValueEventListener() {
