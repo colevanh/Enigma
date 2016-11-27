@@ -7,6 +7,7 @@ package com.group16.enigma;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +79,8 @@ public class FriendsListAdapter extends BaseAdapter {
         holder.tv.setText(friendsList.get(position));
         setDPDrawable(friendsList.get(position), holder);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         final Button btn = (Button) rowView.findViewById(R.id.item_friend_name);
         btn.setBackground(null);
 
@@ -101,20 +104,20 @@ public class FriendsListAdapter extends BaseAdapter {
 
                 //Adds conversation under user for current user
                 //TODO: Fix crash here
-//                mDatabase.child("user").child(mUsername.replace(".","")).child("conversations")
-//                        .child(friendName.replace(".",""))
-//                        .setValue(new Conversation(Integer.toString(hash), friendName));
-//
-//                //Adds conversation under user for friend
-//                mDatabase.child("user").child(friendName.replace(".","")).child("conversations")
-//                        .child(mUsername.replace(".",""))
-//                        .setValue(new Conversation(Integer.toString(hash), mUsername));
-//
-//                //Start new chat in chat page
-//                Intent intent = new Intent(context, ChatActivity.class);
-//                intent.putExtra("name", friendName);
-//                intent.putExtra("reference", Integer.toString(hash));
-//                context.startActivity(intent);
+                mDatabase.child("user").child(mUsername.replace(".","")).child("conversations")
+                        .child(friendName.replace(".",""))
+                        .setValue(new Conversation(Integer.toString(hash), friendName));
+
+                //Adds conversation under user for friend
+                mDatabase.child("user").child(friendName.replace(".","")).child("conversations")
+                        .child(mUsername.replace(".",""))
+                        .setValue(new Conversation(Integer.toString(hash), mUsername));
+
+                //Start new chat in chat page
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra("name", friendName);
+                intent.putExtra("reference", Integer.toString(hash));
+                context.startActivity(intent);
 
                 //@Hayden: Will we also need to make sure that the Chat tab displays the new chat?
             }
