@@ -75,12 +75,12 @@ public class MainActivity extends AppCompatActivity {
                 //User user1 = new User("mich@test.com", )
                 Snackbar.make(view, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                String friendName = "a@q.com";
-                String friendName2 = "c@d.com";
+//                String friendName = "a@q.com";
+//                String friendName2 = "c@d.com";
 
                 //Create fake shared conversations (delete when ready)
-                mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName.replace(".","")).setValue(new Conversation("423472384", "a@q.com"));
-                mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName2.replace(".","")).setValue(new Conversation("422452734", "c@d.com"));
+//                mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName.replace(".","")).setValue(new Conversation("423472384", "a@q.com"));
+//                mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName2.replace(".","")).setValue(new Conversation("422452734", "c@d.com"));
 
                 //TODO:Fix crash
                 //startConversationwithHayden();

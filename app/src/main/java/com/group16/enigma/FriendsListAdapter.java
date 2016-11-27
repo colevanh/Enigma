@@ -6,6 +6,7 @@ package com.group16.enigma;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,12 +56,11 @@ public class FriendsListAdapter extends BaseAdapter {
     private FirebaseUser mFirebaseUser;
     private FirebaseAuth mFirebaseAuth;
 
-    //Test user to populate list
-    User test = new User("do@gmail.com");
-    List<User> friendsList = new ArrayList<User>();
+    List<String> friendsList = new ArrayList<>();
 
     private static LayoutInflater inflater = null;
-    public FriendsListAdapter(Context mainActivity, List<User> friendsList) {
+
+    public FriendsListAdapter(Context mainActivity, List<String> friendsList) {
         context = mainActivity;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -70,38 +70,32 @@ public class FriendsListAdapter extends BaseAdapter {
     public int getCount() {
         return friendsList.size();
     }
-
     @Override
     public Object getItem(int position) {
         return position;
     }
-
     @Override
     public long getItemId(int position) {
         return position;
     }
-
     public class Holder {
         TextView tv;
         ImageView img;
     }
-
     public int hash(String v1, String v2) {
         return v1.hashCode() ^ v2.hashCode();
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        final Holder holder=new Holder();
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
+        final Holder holder = new Holder();
         final View rowView;
-
-        friendsList.add(test);
 
         rowView = inflater.inflate(R.layout.item_friend, null);
         holder.tv=(TextView) rowView.findViewById(R.id.item_friend_name);
         holder.img=(ImageView) rowView.findViewById(R.id.item_friend_dp);
-        holder.tv.setText(friendsList.get(position).email);
-        setDPDrawable(friendsList.get(position).email, holder);
+        holder.tv.setText(friendsList.get(position));
+        setDPDrawable(friendsList.get(position), holder);
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,36 +106,36 @@ public class FriendsListAdapter extends BaseAdapter {
                 mUsername = mFirebaseUser.getEmail();
 
                 //Gets friend username
-                TextView tv = (TextView)v;
-                String friendName = tv.getText().toString();
+//                TextView tv = (TextView)getView(position, convertView, parent); //TODO: FIX CRASH HERE
+//                String friendName = tv.getText().toString();
 
-                //Generate unique hash between two friends
-                int hash = hash(friendName, mUsername);
+                //Generate unique hash between active user and selected friend
+//                int hash = hash(friendName, mUsername);
 
                 //Adds conversation under user for current user
-                mDatabase.child("user").child(mUsername.replace(".","")).child("conversations")
-                        .child(friendName.replace(".",""))
-                        .setValue(new Conversation(Integer.toString(hash), friendName));
+//                mDatabase.child("user").child(mUsername.replace(".","")).child("conversations")
+//                        .child(friendName.replace(".",""))
+//                        .setValue(new Conversation(Integer.toString(hash), friendName));
 
                 //Adds conversation under user for friend
-                mDatabase.child("user").child(friendName.replace(".","")).child("conversations")
-                        .child(mUsername.replace(".",""))
-                        .setValue(new Conversation(Integer.toString(hash), mUsername));
+//                mDatabase.child("user").child(friendName.replace(".","")).child("conversations")
+//                        .child(mUsername.replace(".",""))
+//                        .setValue(new Conversation(Integer.toString(hash), mUsername));
 
                 //Start new chat in chat page
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("name", friendName);
-                intent.putExtra("reference", Integer.toString(hash));
-                context.startActivity(intent);
+                Snackbar.make(v, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+//                Intent intent = new Intent(context, ChatActivity.class);
+//                intent.putExtra("name", friendName);
+//                intent.putExtra("reference", Integer.toString(hash));
+//                context.startActivity(intent);
             }
         });
         return rowView;
     }
 
-
     public static void setDPDrawable(String name, final Holder h){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(name.replace(".",""));
-
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -198,6 +192,5 @@ public class FriendsListAdapter extends BaseAdapter {
 
         }
     }
-
 }
 

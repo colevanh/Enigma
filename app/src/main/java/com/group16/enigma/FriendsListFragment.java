@@ -61,9 +61,8 @@ public class FriendsListFragment extends Fragment {
                     username = user.getKey();
                     list.add(username);
                 }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_list_item_1, list);
-                lv.setAdapter(arrayAdapter);
+                FriendsListAdapter adapter = new FriendsListAdapter(getContext(), list);
+                lv.setAdapter(adapter);
             }
             @Override
             //TODO:FIX
@@ -72,9 +71,8 @@ public class FriendsListFragment extends Fragment {
                     username = user.getKey();
                     list.remove(username);
                 }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_list_item_1, list);
-                lv.setAdapter(arrayAdapter);
+                FriendsListAdapter adapter = new FriendsListAdapter(getContext(), list);
+                lv.setAdapter(adapter);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

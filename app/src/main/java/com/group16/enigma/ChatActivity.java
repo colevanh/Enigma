@@ -62,26 +62,11 @@ public class ChatActivity extends AppCompatActivity {
     private String userKey;
     private boolean verified = true;
 
-
     //*General string used for writing all messages
     public static String MESSAGES_CHILD = "messages";
     public String MESSAGES_HASH;
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 200;
 
-    /*Reformat database structure to:
-        AllMessages
-            Messages1
-                Key
-            Messages2
-            Messages3
-            Messages4
-        User1 (accessible only to User1 on login, created on sign up)
-            Friend1 - Reference to Messages1 (Unique history of msgs between User1 and Friend1)
-            Friend2 - Reference to Messages2
-        User2
-            Friend1 - Reference to Messages3
-            Friend3 - Reference to Messages4
-    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,10 +77,8 @@ public class ChatActivity extends AppCompatActivity {
         String name = intent.getStringExtra("name");
         String reference= intent.getStringExtra("reference");
 
-
         getSupportActionBar().setTitle(name);
 
-        //What does this do?
         MESSAGES_CHILD = "messages";
         MESSAGES_HASH = reference;
 
