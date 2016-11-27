@@ -12,12 +12,15 @@
         android:layout_height="50dp"
         android:src="@drawable/bat"
         android:layout_gravity="center"/>
-    <TextView
+    <Button
         android:id="@+id/item_friend_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textSize="20dp"
         android:text="Spongebob"
         android:gravity="center"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="5dp"
+        android:textAllCaps="false"
+        android:textColor="@color/colorDarkGray"
+        android:fontFamily="sans-serif"/>
 </LinearLayout>

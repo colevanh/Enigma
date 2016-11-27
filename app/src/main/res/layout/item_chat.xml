@@ -19,5 +19,7 @@
         android:textSize="20dp"
         android:text="Spongebob"
         android:gravity="center"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/colorDarkGray"
+        android:fontFamily="sans-serif"/>
 </LinearLayout>

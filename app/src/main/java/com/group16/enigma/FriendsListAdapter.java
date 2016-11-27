@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,26 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import android.content.Context;
-import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +78,10 @@ public class FriendsListAdapter extends BaseAdapter {
         holder.tv.setText(friendsList.get(position));
         setDPDrawable(friendsList.get(position), holder);
 
-        rowView.setOnClickListener(new View.OnClickListener() {
+        final Button btn = (Button) rowView.findViewById(R.id.item_friend_name);
+        btn.setBackground(null);
+
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Gets username
@@ -106,29 +90,33 @@ public class FriendsListAdapter extends BaseAdapter {
                 mUsername = mFirebaseUser.getEmail();
 
                 //Gets friend username
-//                TextView tv = (TextView)getView(position, convertView, parent); //TODO: FIX CRASH HERE
-//                String friendName = tv.getText().toString();
+                String friendName = btn.getText().toString();
 
                 //Generate unique hash between active user and selected friend
-//                int hash = hash(friendName, mUsername);
+                int hash = hash(friendName, mUsername);
+
+                Snackbar.make(v, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
 
                 //Adds conversation under user for current user
+                //TODO: Fix crash here
 //                mDatabase.child("user").child(mUsername.replace(".","")).child("conversations")
 //                        .child(friendName.replace(".",""))
 //                        .setValue(new Conversation(Integer.toString(hash), friendName));
-
-                //Adds conversation under user for friend
+//
+//                //Adds conversation under user for friend
 //                mDatabase.child("user").child(friendName.replace(".","")).child("conversations")
 //                        .child(mUsername.replace(".",""))
 //                        .setValue(new Conversation(Integer.toString(hash), mUsername));
-
-                //Start new chat in chat page
-                Snackbar.make(v, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//
+//                //Start new chat in chat page
 //                Intent intent = new Intent(context, ChatActivity.class);
 //                intent.putExtra("name", friendName);
 //                intent.putExtra("reference", Integer.toString(hash));
 //                context.startActivity(intent);
+
+                //@Hayden: Will we also need to make sure that the Chat tab displays the new chat?
             }
         });
         return rowView;

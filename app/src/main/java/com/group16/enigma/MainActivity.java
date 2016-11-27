@@ -67,14 +67,14 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            //Click will create new chat with friend
-            @Override
-            public void onClick(View view) {
-                //User user1 = new User("mich@test.com", )
-                Snackbar.make(view, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            //Click will create new chat with friend
+//            @Override
+//            public void onClick(View view) {
+//                //User user1 = new User("mich@test.com", )
+//                Snackbar.make(view, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
 //                String friendName = "a@q.com";
 //                String friendName2 = "c@d.com";
 
@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
                 //TODO:Fix crash
                 //startConversationwithHayden();
-            }
-        });
+//            }
+//        });
 
 
     }
