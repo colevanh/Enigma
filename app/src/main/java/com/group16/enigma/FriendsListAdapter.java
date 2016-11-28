@@ -97,13 +97,9 @@ public class FriendsListAdapter extends BaseAdapter {
 
                 //Generate unique hash between active user and selected friend
                 int hash = hash(friendName, mUsername);
-
-                Snackbar.make(v, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
+                
 
                 //Adds conversation under user for current user
-                //TODO: Fix crash here
                 mDatabase.child("user").child(mUsername.replace(".","")).child("conversations")
                         .child(friendName.replace(".",""))
                         .setValue(new Conversation(Integer.toString(hash), friendName));

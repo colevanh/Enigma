@@ -113,7 +113,7 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(SignInActivity.this, "Auth Failed",
+                            Toast.makeText(SignInActivity.this, "Please enter a valid email address and password longer than 5 characters",
                                     Toast.LENGTH_SHORT).show();
                         } else{
                             Map<String, String> userInfo = new HashMap<>();
@@ -149,7 +149,7 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(SignInActivity.this, "Auth Failed",
+                            Toast.makeText(SignInActivity.this, "Login failed - Please check your email and password",
                                     Toast.LENGTH_SHORT).show();
                         }
 
