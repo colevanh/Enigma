@@ -31,9 +31,11 @@ public class ChatListAdapter extends BaseAdapter {
     public ChatListAdapter(Context mainActivity, List<Conversation> conversationList) {
         // TODO Auto-generated constructor stub
         context=mainActivity;
-        inflater = ( LayoutInflater )context.
-                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.conversationList = conversationList;
+        if(context != null) {
+            inflater = (LayoutInflater) context.
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            this.conversationList = conversationList;
+        }
     }
     @Override
     public int getCount() {
