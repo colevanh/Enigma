@@ -67,8 +67,6 @@ public class FriendsListAdapter extends BaseAdapter {
 
     //Generates a unique hash from two strings
     public static int hash(String v1, String v2) {
-        Log.v("/////", v1 + v2);
-        Log.v("/////", (v1.hashCode() ^ v2.hashCode())+"");
         return v1.hashCode() ^ v2.hashCode();
 
     }
