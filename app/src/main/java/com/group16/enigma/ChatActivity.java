@@ -352,6 +352,8 @@ public class ChatActivity extends AppCompatActivity {
     private String decypherText(String message){
         //Decrypt the message given the key
         String decryptedMessage = "";
+        if(message == null)
+            return "";
         try {
             decryptedMessage = Aes.decryptString(new Aes.CipherTextIvMac(message), keys);
 

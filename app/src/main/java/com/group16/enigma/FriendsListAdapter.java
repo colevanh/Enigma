@@ -67,7 +67,10 @@ public class FriendsListAdapter extends BaseAdapter {
 
     //Generates a unique hash from two strings
     public static int hash(String v1, String v2) {
+        Log.v("/////", v1 + v2);
+        Log.v("/////", (v1.hashCode() ^ v2.hashCode())+"");
         return v1.hashCode() ^ v2.hashCode();
+
     }
 
     @Override
@@ -98,7 +101,7 @@ public class FriendsListAdapter extends BaseAdapter {
                 String friendName = btn.getText().toString();
 
                 //Generate unique hash between active user and selected friend
-                int hash = hash(friendName, mUsername);
+                int hash = hash(friendName, mUsername.replace(".",""));
                 
 
                 //Adds conversation under user for current user
