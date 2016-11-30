@@ -117,7 +117,6 @@ public class FriendsListAdapter extends BaseAdapter {
                 intent.putExtra("reference", Integer.toString(hash));
                 context.startActivity(intent);
 
-                //@Hayden: Will we also need to make sure that the Chat tab displays the new chat?
             }
         });
         return rowView;
