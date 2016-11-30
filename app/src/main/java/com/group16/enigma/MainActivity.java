@@ -50,13 +50,13 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
+        //Checks if user is logged in
         if (mFirebaseUser == null) {
             startActivity(new Intent(this, SignInActivity.class));
             finish();
             return;
         } else {
             mUsername = mFirebaseUser.getEmail();
-            //mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
         }
         setSupportActionBar(toolbar);
 
@@ -67,55 +67,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            //Click will create new chat with friend
-//            @Override
-//            public void onClick(View view) {
-//                //User user1 = new User("mich@test.com", )
-//                Snackbar.make(view, "Start Chat Function Still In Progress", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//                String friendName = "a@q.com";
-//                String friendName2 = "c@d.com";
-
-                //Create fake shared conversations (delete when ready)
-//                mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName.replace(".","")).setValue(new Conversation("423472384", "a@q.com"));
-//                mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName2.replace(".","")).setValue(new Conversation("422452734", "c@d.com"));
-
-                //TODO:Fix crash
-                //startConversationwithHayden();
-//            }
-//        });
-
 
     }
 
-// MOVED TO FRIENDSLISTADAPTER
-
-//    private void startConversationwithHayden() {
-//        //@Michaella! Change this to whichever friend was clicked in the friends page-> it ll create a new convo with them
-//        //(or just direct to the existing if its already created)
-//        String friendName = "hayden@enigma.com";
-//
-//        //Generate unique hash between two friends
-//        int hash = hash(friendName, mUsername);
-//
-//        //Adds conversation under user for current user
-//        mFirebaseDatabaseReference.child("user").child(mUsername.replace(".","")).child("conversations").child(friendName.replace(".","")).setValue(new Conversation(Integer.toString(hash), friendName));
-//
-//        //Adds conversation under user for friend
-//        mFirebaseDatabaseReference.child("user").child(friendName.replace(".","")).child("conversations").child(mUsername.replace(".","")).setValue(new Conversation(Integer.toString(hash), mUsername));
-//
-//        //Navigate to chat page
-//        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-//        intent.putExtra("name", friendName);
-//        intent.putExtra("reference", Integer.toString(hash));
-//        startActivity(intent);
-//    }
-
-//    public int hash(String v1, String v2) {
-//        return v1.hashCode() ^ v2.hashCode();
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

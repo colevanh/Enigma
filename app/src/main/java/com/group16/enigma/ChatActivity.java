@@ -73,10 +73,13 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Get friend name and chat reference for use in Firebase
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
         String reference= intent.getStringExtra("reference");
 
+
+        //Set friend name in action bar
         getSupportActionBar().setTitle(name);
 
         MESSAGES_CHILD = "messages";
@@ -89,6 +92,7 @@ public class ChatActivity extends AppCompatActivity {
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
+        //Hide loading bar if no messages exist (new chat)
         mFirebaseDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -103,6 +107,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //Retrieve messages from Firebase
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, MessageViewHolder>(
                 Message.class,
                 R.layout.item_message,
@@ -124,6 +129,8 @@ public class ChatActivity extends AppCompatActivity {
             }
         };
 
+
+        //Register adapter with observer
         mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -144,6 +151,8 @@ public class ChatActivity extends AppCompatActivity {
 
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT)});
+
+        //Checks to see if message text is changed
         mMessageEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -163,6 +172,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //When send button is clicked, encrypt the messages and upload to Firebase
         mSendButton = (Button) findViewById(R.id.sendButton);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,15 +197,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        //mFirebaseDatabaseReference.child("chat").child("somekey").child("key").push().setValue("Hello");
-
-//        Map<String, String> chattest = new HashMap<String, String>();
-//        chattest.put("key", "orange");
-//        chattest.put("salt", "somelongsalt");
-//
-//        mFirebaseDatabaseReference.child("chat").child("422452734").child("key").setValue(chattest);
-
-
+        //Ask for secret key when user enters this page
         promptPassword();
 
     }
@@ -220,10 +222,11 @@ public class ChatActivity extends AppCompatActivity {
 
                 userKey = input.getText().toString();
 
-
+                //Salt is hardcoded in order to generate the same key given the secret shared key
                 String hardcodeSalt = "VMq4oX7rxhRS8r0vwWEc2uspgsu/rpF7G+mw3vgtUzrAcsNGHQJb+DKXDrolxUTBGpq8XAkKRUWN5ZeSRUi7dSYavjO/gwErrDv2sDzoEaTvQCXLNpAhm6cwxLidAw3nTOY/wITpY4DiZzbV8bMatUjhCRPsujBHZY8CqD0oTbU=";
+
+                //Generate decryption key from the shared secret key
                 try{
-                    //KEY IS TEST
                     if(input.length() == 0 || input.equals("")) {
                         keys = Aes.generateKeyFromPassword("EMPTYKEY", hardcodeSalt);
                     }else {
@@ -237,6 +240,7 @@ public class ChatActivity extends AppCompatActivity {
 
         builder.show();
 
+        //Show soft keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
@@ -258,11 +262,13 @@ public class ChatActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
 
+            //User wants to decode the last message
             case R.id.action_decode_message:
                 refreshFirebaseAdapter(true);
 
                 break;
 
+            //User wants to decode all the messages
             case R.id.action_decode_message_all:
                 refreshFirebaseAdapter(false);
             default:
@@ -292,6 +298,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     String decypheredText = decypherText(friendlyMessage.getText());
 
+                    //If it is the most recent message, decrypt; otherwise show the encrypted message
                     if (this.getItemCount() - 1 == position) {
                         if(decypheredText == "")
                             viewHolder.messageTextView.setText(friendlyMessage.getText());
@@ -337,11 +344,13 @@ public class ChatActivity extends AppCompatActivity {
                 }
             };
         }
+        //Swap with the adapter containing the decrypted text
         mMessageRecyclerView.swapAdapter(tempAdapter, true);
         isDecrypting = false;
     }
 
     private String decypherText(String message){
+        //Decrypt the message given the key
         String decryptedMessage = "";
         try {
             decryptedMessage = Aes.decryptString(new Aes.CipherTextIvMac(message), keys);
@@ -355,6 +364,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public static void setDPDrawable(String name, final MessageViewHolder v){
+        //Show the dp given the DP name
         if(FirebaseDatabase.getInstance().getReference() == null) {
             return;
         }

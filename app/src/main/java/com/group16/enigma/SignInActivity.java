@@ -96,13 +96,13 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
     }
 
     private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
             return;
         }
         final String userEmail = email;
         showProgressDialog();
 
+        //Register user
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -116,6 +116,7 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
                             Toast.makeText(SignInActivity.this, "Please enter a valid email address and password longer than 5 characters",
                                     Toast.LENGTH_SHORT).show();
                         } else{
+                            //Adds new user into Firebase with random DP
                             Map<String, String> userInfo = new HashMap<>();
                             userInfo.put("name", userEmail);
                             userInfo.put("img", generateRandomDP());
@@ -131,18 +132,18 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
         User newUser = new User(email);
     }
     private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
+
         if (!validateForm()) {
             return;
         }
 
         showProgressDialog();
 
+        //Signin with email and password
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -159,6 +160,8 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
     }
 
     private String generateRandomDP(){
+
+        //Chooses a random DP for user
         String[] imgName = new String[]{"bat.png", "bee.png", "bird.png", "butterfly.png", "dog.png",
         "dolphin.png", "duck.png", "fish.png", "gorilla.png", "kangaroo.png", "kiwi.png", "rabbit.png",
         "shark.png", "snail.png", "turtle.png"};
@@ -167,6 +170,8 @@ public class SignInActivity  extends AppCompatActivity implements View.OnClickLi
         return imgName[index];
     }
     private boolean validateForm() {
+
+        //Form validation
         boolean valid = true;
 
         String email = mEmailField.getText().toString();

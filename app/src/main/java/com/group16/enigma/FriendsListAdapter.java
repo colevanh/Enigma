@@ -64,6 +64,8 @@ public class FriendsListAdapter extends BaseAdapter {
         TextView tv;
         ImageView img;
     }
+
+    //Generates a unique hash from two strings
     public int hash(String v1, String v2) {
         return v1.hashCode() ^ v2.hashCode();
     }
@@ -121,6 +123,7 @@ public class FriendsListAdapter extends BaseAdapter {
         return rowView;
     }
 
+    //Finds user's DP and assigns it
     public static void setDPDrawable(String name, final Holder h){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(name.replace(".",""));
         ref.addValueEventListener(new ValueEventListener() {
@@ -139,6 +142,7 @@ public class FriendsListAdapter extends BaseAdapter {
         });
     }
 
+    //Returns the corresponding DP image
     public static int getDPDrawable(String fileName){
         if(fileName == null){
             return R.drawable.bird;

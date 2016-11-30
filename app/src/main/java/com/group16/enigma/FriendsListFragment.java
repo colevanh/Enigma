@@ -65,7 +65,6 @@ public class FriendsListFragment extends Fragment {
                 lv.setAdapter(adapter);
             }
             @Override
-            //TODO:FIX
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 for (DataSnapshot user : dataSnapshot.getChildren()) {
                     username = user.getKey();

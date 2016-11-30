@@ -29,7 +29,6 @@ public class ChatListAdapter extends BaseAdapter {
     List<Conversation> conversationList;
     private static LayoutInflater inflater=null;
     public ChatListAdapter(Context mainActivity, List<Conversation> conversationList) {
-        // TODO Auto-generated constructor stub
         context=mainActivity;
         if(context != null) {
             inflater = (LayoutInflater) context.
@@ -39,19 +38,16 @@ public class ChatListAdapter extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return conversationList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
@@ -62,7 +58,6 @@ public class ChatListAdapter extends BaseAdapter {
     }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
         Holder holder=new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.item_chat, null);
@@ -85,6 +80,7 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public static void setDPDrawable(String name, final Holder h){
+        //Get DP text from Firebase and show it
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user").child(name.replace(".",""));
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -106,6 +102,7 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public static int getDPDrawable(String fileName){
+        //Return the correct drawable for DP
         if(fileName == null){
             return R.drawable.bird;
         }

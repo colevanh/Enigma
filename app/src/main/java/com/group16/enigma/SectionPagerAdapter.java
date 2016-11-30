@@ -17,6 +17,7 @@ public class SectionPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        //Returns the fragment depending on the position in the tab layout
         switch (position) {
             case 0:
                 return new FriendsListFragment();
@@ -37,6 +38,7 @@ public class SectionPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        //Sets title for each tab
         switch (position) {
             case 0:
                 return "Friends";
