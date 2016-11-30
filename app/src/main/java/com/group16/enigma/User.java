@@ -6,8 +6,8 @@ package com.group16.enigma;
  */
 
 public class User {
-    protected String email;
-    protected String username;
+    public String email;
+    public String username;
 
     public User() {}
     public User(String email) {
