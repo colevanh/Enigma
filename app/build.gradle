@@ -49,3 +49,7 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+dependencies{
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.6.3'
+}

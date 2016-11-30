@@ -1,4 +1,4 @@
-package com.group16.enigma.test;
+package com.group16.enigma;
 
 import com.group16.enigma.MainActivity;
 import com.robotium.solo.*;
