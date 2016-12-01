@@ -32,7 +32,7 @@ public class bDecrypt extends ActivityInstrumentationTestCase2<MainActivity> {
         //Click on Chat
 		solo.clickOnText(java.util.regex.Pattern.quote("Chat"));
         //Click on michaellasheng@gmailcom
-		solo.clickOnText(java.util.regex.Pattern.quote("michaellasheng@gmailcom"));
+		solo.clickOnText(java.util.regex.Pattern.quote("michaella.sheng@gmail.com"));
         //Wait for activity: 'com.group16.enigma.ChatActivity'
 		assertTrue("com.group16.enigma.ChatActivity is not found!", solo.waitForActivity(com.group16.enigma.ChatActivity.class));
         //Enter the text: 'TEST'

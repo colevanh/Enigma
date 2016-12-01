@@ -21,4 +21,12 @@ public class Conversation {
     public void setFriend(String fri){
         friend = fri;
     }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public String getFriend() {
+        return friend;
+    }
 }
